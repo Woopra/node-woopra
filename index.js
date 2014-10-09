@@ -24,10 +24,7 @@ var _config  = {
     },
     _defaultClient = {
         ip: '0.0.0.0'
-    },
-    _client = _defaultClient,
-    _visitor = {},
-    _session = {};
+    };
 
 var API_URL = '//www.woopra.com/track/';
 
@@ -52,128 +49,141 @@ function buildUrlParams(params, prefix) {
 }
 
 
-/**
- * Sends tracking/identify requests to Woopra.  All requests will include
- * visitor properties and client options data
- */
-function request(endpoint, data, cb) {
-    var protocol = _config.ssl ? 'https' : 'http',
-        method = _config.ssl ? https.get : http.get,
-        _data = data || {},
-        params = [];
-
-    if (!_config.domain) {
-        throw new Error('`domain` needs to be configured');
+function Woopra(key, options) {
+    if (!key) {
+        throw new Error('Missing your project key (usually your domain)');
     }
 
-    if (!_visitor.cookie && !_visitor.id && !_visitor.email) {
-        throw new Error('Missing `cookie` or `email` property for visitor');
-    }
+    this.projectKey = key;
+    this.initialize.apply(this, arguments);
+    this.options = _extend(this.options, _config);
+    this.options = _extend(this.options, options);
+}
 
-    params.push(buildUrlParams(client()));
-    params.push(buildUrlParams(_visitor, 'cv_'));
+Woopra.prototype = {
+    initialize: function() {
+        this._client = _extend({}, _defaultClient);
+        this._visitor = {};
+        this.options = {};
+    },
 
-    if (_data.eventData) {
-        params.push(buildUrlParams(_data.eventData, 'ce_'));
-    }
+    /**
+     * Sends tracking/identify requests to Woopra.  All requests will include
+     * visitor properties and client options data
+     */
+    request: function(endpoint, data, cb) {
+        var protocol = this.options.ssl ? 'https' : 'http',
+            method = this.options.ssl ? https.get : http.get,
+            _data = data || {},
+            params = [];
 
-    return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function() {
-        if (typeof cb === 'function') {
-            cb();
+        if (!this.projectKey) {
+            throw new Error('Missing your project key (usually your domain)');
         }
-    });
-}
-/* Public functions */
 
-/**
- * Sets configuration options
- */
-function config(properties) {
-    if (typeof properties === 'undefined') {
-        return _config;
-    }
-    else {
-        _extend(_config, properties);
-    }
+        if (!this._visitor.cookie && !this._visitor.id && !this._visitor.email) {
+            throw new Error('Missing `cookie` or `email` property for visitor');
+        }
 
-    return this;
-}
+        params.push(buildUrlParams(this.client()));
+        params.push(buildUrlParams(this._visitor, 'cv_'));
 
-/**
- * Sets client data
- *
- * screen: window.screen.width + 'x' + window.screen.height,
- * language: window.navigator.browserLanguage || window.navigator.language || "",
- * referer: document.referrer,
- * cookie
- */
-function client(properties) {
-    if (typeof properties === 'undefined') {
-        return _extend(_client, {
-            website: _config.domain,
-            app: 'node'
+        if (_data.eventData) {
+            params.push(buildUrlParams(_data.eventData, 'ce_'));
+        }
+
+        return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function() {
+            if (typeof cb === 'function') {
+                cb();
+            }
         });
+    },
+
+    /**
+     * Sets configuration options
+     */
+    config: function(properties) {
+        if (typeof properties === 'undefined') {
+            return this.options;
+        }
+        else {
+            _extend(this.options, properties);
+        }
+
+        return this;
+    },
+
+    /**
+     * Sets client data
+     *
+     * screen: window.screen.width + 'x' + window.screen.height,
+     * language: window.navigator.browserLanguage || window.navigator.language || "",
+     * referer: document.referrer,
+     * cookie
+     */
+    client: function(properties) {
+        if (typeof properties === 'undefined') {
+            return _extend(this._client, {
+                website: this.projectKey,
+                app: 'node'
+            });
+        }
+        else {
+            _extend(this._client, properties);
+        }
+    },
+
+    /**
+     * Sets visitor properties, does not send a HTTP request to Woopra
+     */
+    identify: function(id, properties) {
+        if (typeof id === 'object') {
+            _extend(this._visitor, id);
+        }
+
+        else {
+            _extend(this._visitor, properties);
+            this._visitor.email = id;
+        }
+
+        return this;
+    },
+
+    /**
+     * Identifies a user with Woopra without creating an event
+     */
+    push: function(cb) {
+        return this.request('identify', {} , cb);
+    },
+
+    track: function(name, options) {
+        var event = _extend({}, options),
+            cb,
+            _hash,
+            _cb = arguments[arguments.length - 1];
+
+        if (typeof _cb === 'function') {
+            cb = _cb;
+        }
+
+        // require event name
+        if (!name || typeof name !== 'string') {
+            throw new Error('track() requires a `name` parameter');
+        }
+
+        event.name = name;
+
+        return this.request('ce', {
+            eventData: event
+        }, cb);
+    },
+
+    /**
+     * Clears client data and visitor properties
+     */
+    reset: function() {
+        this.initialize();
     }
-    else {
-        _extend(_client, properties);
-    }
-}
-
-/**
- * Sets visitor properties, does not send a HTTP request to Woopra
- */
-function identify(id, properties) {
-    if (typeof id === 'object') {
-        _extend(_visitor, id);
-    }
-
-    else {
-        _extend(_visitor, properties);
-        _visitor.email = id;
-    }
-
-    return this;
-}
-
-/**
- * Identifies a user with Woopra without creating an event
- */
-function push(cb) {
-    return request('identify', {} , cb);
-}
-
-function track(name, options) {
-    var event = _extend({}, options),
-        cb,
-        _hash,
-        _cb = arguments[arguments.length - 1];
-
-    if (typeof _cb === 'function') {
-        cb = _cb;
-    }
-
-    // require event name
-    if (!name || typeof name !== 'string') {
-        throw new Error('track() requires a `name` parameter');
-    }
-
-    event.name = name;
-
-    return request('ce', {
-        eventData: event
-    }, cb);
-}
-
-function reset() {
-    _client = _defaultClient;
-    _visitor = {};
-}
-
-module.exports = {
-    config: config,
-    client: client,
-    reset: reset,
-    identify: identify,
-    push: push,
-    track: track
 };
+
+module.exports = Woopra;

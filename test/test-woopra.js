@@ -4,51 +4,48 @@ var should = require('should');
 var sinon = require('sinon');
 
 describe('Woopra', function() {
+    var Woopra = require('../index.js');
+    var PROJECT = 'test-woopra.com';
+
     var woopra;
 
     var sslSpy = sinon.spy(https, 'get');
     var spy = sinon.spy(http, 'get');
 
     beforeEach(function() {
-        woopra = require('../index.js');
     });
 
     afterEach(function() {
-        delete require.cache[require.resolve('../index.js')];
-        woopra = null;
     });
 
     describe('Setting configuration and client data', function() {
-        it('should set and return configuration object', function() {
-            woopra.client().should.not.have.property('domain');
+        it('should throw an error if not initialized with a project key', function() {
+            (function() {
+                woopra = new Woopra();
+            }).should.throw();
+        });
 
-            woopra.config({
-                domain: 'test-woopra.com'
+        it('should initialize with project key and configuration options', function() {
+            woopra = new Woopra(PROJECT, {
+                foo: 'bar'
             });
 
-            woopra.config().should.have.property('domain', 'test-woopra.com');
+            woopra.projectKey.should.equal(PROJECT, 'initialize with project key');
+            woopra.options.should.have.property('foo', 'bar');
         });
 
         it('should always extend configuration object when called', function() {
-            woopra.config({
-                domain: 'test-woopra.com'
+            woopra = new Woopra(PROJECT, {
+                foo: 'bar'
             });
 
             woopra.config({
-                domain: 'woopra3.com',
-                domain2: 'woopra2.com'
+                foo: 'baz',
+                bar: 'foo'
             });
 
-            woopra.config().should.have.property('domain', 'woopra3.com');
-            woopra.config().should.have.property('domain2', 'woopra2.com');
-        });
-
-        it('should return configured `domain` property as a `website` property', function() {
-            woopra.config({
-                domain: 'test-woopra.com'
-            });
-
-            woopra.client().should.have.property('website', 'test-woopra.com');
+            woopra.config().should.have.property('foo', 'baz');
+            woopra.config().should.have.property('bar', 'foo');
         });
 
         it('should set and return client data', function() {
@@ -70,9 +67,7 @@ describe('Woopra', function() {
 
     describe('Sending configuration, client, and visitor properties to remote server', function() {
         beforeEach(function() {
-            woopra.config({
-                domain: 'test-woopra.com'
-            });
+            woopra = new Woopra(PROJECT);
         });
 
         it('should send to non-SSL server if configured', function() {
@@ -130,9 +125,7 @@ describe('Woopra', function() {
 
     describe('Sending configuration, client, visitor, and event properties to remote server', function() {
         beforeEach(function() {
-            woopra.config({
-                domain: 'test-woopra.com'
-            });
+            woopra = new Woopra(PROJECT);
             woopra.identify('billyid');
         });
 
@@ -177,10 +170,6 @@ describe('Woopra', function() {
         });
 
         it('should clear visitor properties after setting them', function() {
-            woopra.config({
-                domain: 'test-woopra.com'
-            });
-
             woopra.identify('test@test-woopra.com', {
                 gender: 'male'
             });
