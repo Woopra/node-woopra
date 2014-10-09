@@ -1,0 +1,31 @@
+{
+  "name": "woopra",
+  "version": "0.0.1",
+  "description": "Real-time customer analytics",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woopra/node-woopra"
+  },
+  "keywords": [
+    "analytics",
+    "woopra",
+    "customer",
+    "analytics",
+    "realtime"
+  ],
+  "author": "Billy Vong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/woopra/node-woopra/issues"
+  },
+  "homepage": "https://github.com/woopra/node-woopra",
+  "devDependencies": {
+    "mocha": "^1.21.4",
+    "should": "^4.0.4",
+    "sinon": "^1.10.3"
+  }
+}
