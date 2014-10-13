@@ -154,6 +154,21 @@ describe('Woopra', function() {
             sslSpy.calledWithMatch('ce_property=true').should.equal(true, 'track `test` event with property `property=true`');
 
         });
+
+        it('should call callback after `track` succeeds', function(done) {
+            sslSpy.restore();
+
+            var spy = sinon.spy();
+            var stub = sinon.stub(https, 'get', function(url, callback) {
+                spy.called.should.equal(false, 'callback should not be called yet');
+                callback();
+                stub.restore();
+                done();
+            });
+
+            woopra.track('test', {}, spy);
+            spy.called.should.equal(true, 'callback should be called');
+        });
     });
 
     describe('Reset properties', function() {
