@@ -4,7 +4,7 @@
   "description": "Real-time customer analytics",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
