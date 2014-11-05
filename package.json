@@ -17,6 +17,12 @@
     "analytics",
     "realtime"
   ],
+  "contributors": [
+    {
+      "name": "Paulius Uza",
+      "email": "pauliusuza@gmail.com"
+    }
+  ],
   "author": "Billy Vong",
   "license": "ISC",
   "bugs": {
