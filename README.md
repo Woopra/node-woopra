@@ -48,6 +48,17 @@ woopra.track('eventName', {
 });
 ```
 
+Track event accepts an optional callback with error and HTTP response code parameters
+
+```javascript
+woopra.track('eventName', {
+    eventProperty: 'property'
+}, function(err, responseCode) {
+	if(err) throw err;
+	console.log(responseCode); //200 if OK
+});
+```
+
 ## Methods
 
 ## .config(options)
