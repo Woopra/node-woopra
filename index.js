@@ -94,7 +94,7 @@ Woopra.prototype = {
 
         return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function(res) {
             if (typeof cb === 'function') {
-                cb(null, res);
+                cb(null, res.statusCode);
             }
         }).on('error', function(e) {
             if (typeof cb === 'function') {
