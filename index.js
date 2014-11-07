@@ -92,9 +92,13 @@ Woopra.prototype = {
             params.push(buildUrlParams(_data.eventData, 'ce_'));
         }
 
-        return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function() {
+        return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function(res) {
             if (typeof cb === 'function') {
-                cb();
+                cb(null, res.statusCode);
+            }
+        }).on('error', function(e) {
+            if (typeof cb === 'function') {
+                cb(e, null);
             }
         });
     },
