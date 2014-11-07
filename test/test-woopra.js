@@ -2,6 +2,8 @@ var http = require('http');
 var https = require('https');
 var should = require('should');
 var sinon = require('sinon');
+var EventEmitter = require('events').EventEmitter;
+var util = require('util');
 
 describe('Woopra', function() {
     var Woopra = require('../index.js');
@@ -159,15 +161,36 @@ describe('Woopra', function() {
             sslSpy.restore();
 
             var spy = sinon.spy();
-            var stub = sinon.stub(https, 'get', function(url, callback) {
-                spy.called.should.equal(false, 'callback should not be called yet');
-                callback();
+            var stub = sinon.stub(https, 'get');
+            var event = new EventEmitter();
+
+            stub.returns(event).yields({statusCode: 200});
+
+            woopra.track('test', {}, function(err, statusCode) {
+                statusCode.should.equal(200);
+                should.not.exist(err, 'callback called with no error');
                 stub.restore();
                 done();
             });
 
-            woopra.track('test', {}, spy);
-            spy.called.should.equal(true, 'callback should be called');
+        });
+
+        it('should call error callback after `track` fails', function(done) {
+            sslSpy.restore();
+
+            var spy = sinon.spy();
+            var stub = sinon.stub(https, 'get');
+            var event = new EventEmitter();
+
+            stub.returns(event);
+
+            woopra.track('test', {}, function(err, statusCode) {
+                should.not.exist(statusCode, 'callback should not send a statuscode for errors');
+                should.exist(err, 'callback called with an error');
+                stub.restore();
+                done();
+            });
+            event.emit('error', {});
         });
     });
 
