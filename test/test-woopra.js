@@ -157,6 +157,38 @@ describe('Woopra', function() {
 
         });
 
+        it('should track an event with properties and a timestamp', function() {
+            woopra.track('test', {
+                property: true
+            }, {
+                timestamp: 12345
+            });
+
+            sslSpy.calledWithMatch('event=test').should.equal(true, 'track `test` event');
+            sslSpy.calledWithMatch('ce_property=true').should.equal(true, 'track `test` event with property `property=true`');
+            sslSpy.calledWithMatch('timestamp=12345').should.equal(true, 'track with a timestamp (no `ce_` prefix)');
+        });
+
+        it('should track an event with a timestamp and call callback after `track` succeeds', function(done) {
+            sslSpy.restore();
+
+            var spy = sinon.spy();
+            var stub = sinon.stub(https, 'get');
+            var event = new EventEmitter();
+
+            stub.returns(event).yields({statusCode: 200});
+
+            woopra.track('test', {}, {
+                timestamp: 1
+            }, function(err, statusCode) {
+                statusCode.should.equal(200);
+                should.not.exist(err, 'callback called with no error');
+                stub.restore();
+                done();
+            });
+
+        });
+
         it('should call callback after `track` succeeds', function(done) {
             sslSpy.restore();
 

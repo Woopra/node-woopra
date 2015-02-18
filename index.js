@@ -93,6 +93,9 @@ Woopra.prototype = {
             params.push(buildUrlParams(_data.eventData, 'ce_'));
         }
 
+        if (_data.timestamp) {
+            nonPrefixedEventProps.timestamp = _data.timestamp;
+        }
         if (_data.event) {
             nonPrefixedEventProps.event = _data.event;
         }
@@ -193,6 +196,7 @@ Woopra.prototype = {
         }
 
         return this.request('ce', {
+            timestamp: _opts.timestamp,
             event: name,
             eventData: properties
         }, cb);
