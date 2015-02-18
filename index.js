@@ -75,6 +75,7 @@ Woopra.prototype = {
         var protocol = this.options.ssl ? 'https' : 'http',
             method = this.options.ssl ? https.get : http.get,
             _data = data || {},
+            nonPrefixedEventProps = {},
             params = [];
 
         if (!this.projectKey) {
@@ -91,6 +92,12 @@ Woopra.prototype = {
         if (_data.eventData) {
             params.push(buildUrlParams(_data.eventData, 'ce_'));
         }
+
+        if (_data.event) {
+            nonPrefixedEventProps.event = _data.event;
+        }
+
+        params.push(buildUrlParams(nonPrefixedEventProps));
 
         return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function(res) {
             if (typeof cb === 'function') {
@@ -160,13 +167,23 @@ Woopra.prototype = {
         return this.request('identify', {} , cb);
     },
 
-    track: function(name, options) {
-        var event = _extend({}, options),
-            cb,
+    /**
+     * Track events and any properties, as they happen
+     *
+     * @param String name Name of the event
+     * @param Object options Hash of event properties to track
+     * @param Function cb Optional callback function
+     */
+    track: function(name, properties, options) {
+        var cb,
             _hash,
+            _opts = options || {},
             _cb = arguments[arguments.length - 1];
 
-        if (typeof _cb === 'function') {
+        if (typeof options === 'function') {
+            cb = options;
+        }
+        else if (typeof _cb === 'function') {
             cb = _cb;
         }
 
@@ -175,10 +192,9 @@ Woopra.prototype = {
             throw new Error('track() requires a `name` parameter');
         }
 
-        event.name = name;
-
         return this.request('ce', {
-            eventData: event
+            event: name,
+            eventData: properties
         }, cb);
     },
 

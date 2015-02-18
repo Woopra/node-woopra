@@ -144,7 +144,7 @@ describe('Woopra', function() {
         it('should track an event with no properties', function() {
             woopra.track('test');
 
-            sslSpy.calledWithMatch('name=test').should.equal(true, 'track event name with no properties');
+            sslSpy.calledWithMatch('event=test').should.equal(true, 'track event name with no properties');
         });
 
         it('should track an event with properties', function() {
@@ -152,7 +152,7 @@ describe('Woopra', function() {
                 property: true
             });
 
-            sslSpy.calledWithMatch('name=test').should.equal(true, 'track `test` event');
+            sslSpy.calledWithMatch('event=test').should.equal(true, 'track `test` event');
             sslSpy.calledWithMatch('ce_property=true').should.equal(true, 'track `test` event with property `property=true`');
 
         });
