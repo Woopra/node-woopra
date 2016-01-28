@@ -22,7 +22,7 @@ var Woopra = require('woopra');
 var woopra = new Woopra('projectKey', options);
 ```
 
-Alternatively, you can configure the tracker after initialization by calling `config(properties)`
+Alternatively, you can configure the tracker after initialization by calling `config(options)`
 
 ```javascript
 woopra.config({
