@@ -59,6 +59,8 @@ woopra.track('eventName', {
 });
 ```
 
+#### Note: All event and property names should be lowercase
+
 ## Methods
 
 ## .config(options)
