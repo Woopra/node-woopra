@@ -22,7 +22,7 @@ var Woopra = require('woopra');
 var woopra = new Woopra('projectKey', options);
 ```
 
-You can configure the tracker after initialization by calling `config(properties)`
+Alternatively, you can configure the tracker after initialization by calling `config(properties)`
 
 ```javascript
 woopra.config({
@@ -36,7 +36,7 @@ Your custom visitor data will not be pushed until you send your first custom eve
 
 ```javascript
 woopra.identify('user@id.com', {
-    visitorProperty: 'property'
+    visitor_property: 'property'
 }).push();
 ```
 
@@ -44,7 +44,7 @@ To send a custom event, use `track(eventName, properties)`
 
 ```javascript
 woopra.track('eventName', {
-    eventProperty: 'property'
+    event_property: 'property'
 });
 ```
 
