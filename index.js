@@ -22,9 +22,7 @@ var _extend = require('util')._extend;
 var _config  = {
         ssl: true
     },
-    _defaultClient = {
-        ip: '0.0.0.0'
-    };
+    _defaultClient = {};
 
 var API_URL = '//www.woopra.com/track/';
 
