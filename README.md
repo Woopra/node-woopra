@@ -3,7 +3,7 @@ node-woopra ![Travis CI](https://travis-ci.org/Woopra/node-woopra.svg?branch=mas
 
 nodejs library for Woopra
 
-**Please Note: ** This library is not functional on the client side.  This means for example, that attempting to use browserify, etc. to use this library on the front end will result in cors errors.  There are probably other errors you can run in to if you attempt this setup.
+**Please Note:** This library is not functional on the client side.  This means for example, that attempting to use browserify, etc. to use this library on the front end will result in cors errors.  There are probably other errors you can run in to if you attempt this setup.
 
 ## Installation
 
