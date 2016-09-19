@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/woopra/node-woopra",
   "devDependencies": {
-    "mocha": "^1.21.4",
-    "should": "^4.0.4",
+    "mocha": "^3.0.2",
+    "should": "^11.1.0",
     "sinon": "^1.10.3"
   }
 }
