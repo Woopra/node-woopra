@@ -82,7 +82,7 @@ Woopra.prototype = {
             throw new Error('Missing your project key (usually your domain)');
         }
 
-        if (!this._visitor.cookie && !this._visitor.id && !this._visitor.email) {
+        if (!this.client().cookie && !this._visitor.id && !this._visitor.email) {
             throw new Error('Missing `cookie` or `email` property for visitor');
         }
 
