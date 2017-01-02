@@ -3,6 +3,7 @@
   "version": "0.2.0",
   "description": "Real-time customer analytics",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "mocha"
   },
@@ -30,6 +31,7 @@
   },
   "homepage": "https://github.com/woopra/node-woopra",
   "devDependencies": {
+    "@types/node": "^6.0.55",
     "mocha": "^3.0.2",
     "should": "^11.1.0",
     "sinon": "^1.10.3"
