@@ -61,6 +61,10 @@ woopra.track('eventName', {
 
 #### Note: All event and property names should be lowercase
 
+## TypeScript Support
+TypeScript definitions have been included in this library for convenience.  Woopra has not fully tested the functionality of the defined types, so use with a little caution, and submit an issue or better, a pull request if you notice any issues at all.
+
+
 ## Methods
 
 ## .config(options)
