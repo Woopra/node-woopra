@@ -28,29 +28,29 @@ declare namespace Woopra {
 
     interface ClientData {
         /**
-         * Use SSL for tracking requests.  SSL is not supported for Basic accounts.  (default: true)
+         * Visitor's browser's resolution in format of <width>x<height> (i.e. '1024x768')
          */
-        screen: string;
+        screen?: string;
 
         /**
          * Language of the visitor (i.e. from client-side javascript: window.navigator.language)
          */
-        language: string;
+        language?: string;
 
         /**
          * Referrer of visitor (i.e. from client-side javascript: document.referrer)
          */
-        referer: string;
+        referer?: string;
 
         /**
          * Session ID of the visitor.  Generally this is a cookie value from the browser, but it can be any ID you use to identify the visitor throughout a series of requests.  This should ONLY be used to identify anonymous users, otherwise use `identify()`.
          */
-        cookie: string;
+        cookie?: string;
 
         /**
          * IP Address of the visitor.  (Use `0.0.0.0` if the server is performing an action on behalf of the user (subject to change))
          */
-        ip: string;
+        ip?: string;
     }
 
     interface TrackOptions {
