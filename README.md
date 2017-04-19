@@ -92,17 +92,22 @@ ip | string | IP Address of the visitor.  (Use `0.0.0.0` if the server is perfor
 ## .identify(id, properties)
 Sets visitor properties for the current visitor.  Does not send the properties unless `track` or `push` is called.  Returns an instance of the tracker so that you can chain methods.
 
-* `id` - The unique identifier of the visitor.  We highly recommmend you use the email of the visitor in order to get the most out of AppConnect
+* `id` - The unique identifier of the visitor.  We highly recommend you use the email of the visitor in order to get the most out of AppConnect
 * `properties` - key/value object for any custom visitor properties you want to associate with the visitor. 
 
 ## .push()
 Sends a request to Woopra that only includes any client and visitor data.  This can be used to identify a visitor without generating a tracking event.
 
-## .track(eventName, properties, callback)
+## .track(eventName, properties, [options, [callback]])
 Tracks an event.
 
 * `eventName` - The name of the event that you want to track
 * `properties` - key/value object for any custom event properties to associate with the event
+* `options` Hash of event metadata properties to track (ie: timestamp)
 * `callback` - Callback function after the `track` request succeeds.
 
+The `properties` object takes any custom event properties you want.  For instance `sale_amount`, or `product_name`.
 
+The `options` object is for event metadata.  It currently accepts `timestamp` which should be in unix ms since epoch UTC, as well as `referer` which must be a url string and must include the protocol (eg: `http://`)
+
+The `callback` will be called once the tacking servers have processed and responded to your track request.

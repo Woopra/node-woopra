@@ -93,11 +93,14 @@ Woopra.prototype = {
             params.push(buildUrlParams(_data.eventData, 'ce_'));
         }
 
+        if (_data.event) {
+            nonPrefixedEventProps.event = _data.event;
+        }
         if (_data.timestamp) {
             nonPrefixedEventProps.timestamp = _data.timestamp;
         }
-        if (_data.event) {
-            nonPrefixedEventProps.event = _data.event;
+        if (_data.referer) {
+            nonPrefixedEventProps.referer = _data.referer;
         }
 
         params.push(buildUrlParams(nonPrefixedEventProps));
@@ -197,6 +200,7 @@ Woopra.prototype = {
 
         return this.request('ce', {
             timestamp: _opts.timestamp,
+            referer: _opts.referer || _opts.referrer,
             event: name,
             eventData: properties
         }, cb);
