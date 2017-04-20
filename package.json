@@ -1,6 +1,6 @@
 {
   "name": "woopra",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Real-time customer analytics",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -22,6 +22,10 @@
     {
       "name": "Paulius Uza",
       "email": "pauliusuza@gmail.com"
+    },
+    {
+      "name": "Ralph Samuel",
+      "email": "ralph@woopra.com"
     }
   ],
   "author": "Billy Vong",
