@@ -23,10 +23,11 @@ var _config  = {
         ssl: true
     },
     _defaultClient = {
-        ip: '0.0.0.0'
+        ip: '0.0.0.0',
+        'user-agent': null
     };
 
-var API_URL = '//www.woopra.com/track/';
+var API_URL = 'www.woopra.com';
 
 /**
  * Creates a URL string of key=value, concatenated by an `&`
@@ -72,7 +73,7 @@ Woopra.prototype = {
      * visitor properties and client options data
      */
     request: function(endpoint, data, cb) {
-        var protocol = this.options.ssl ? 'https' : 'http',
+        var protocol = this.options.ssl ? 'https:' : 'http:',
             method = this.options.ssl ? https.get : http.get,
             _data = data || {},
             nonPrefixedEventProps = {},
@@ -105,7 +106,12 @@ Woopra.prototype = {
 
         params.push(buildUrlParams(nonPrefixedEventProps));
 
-        return method(protocol + ':' + API_URL + endpoint + '?' + params.join('&'), function(res) {
+        return method({
+            protocol: protocol,
+            hostname: API_URL,
+            path: '/track/' + endpoint + '?' + params.join('&'),
+            headers: this.client()['user-agent'] ? { 'user-agent': this.client()['user-agent'] } : {}
+        }, function(res) {
             if (typeof cb === 'function') {
                 cb(null, res.statusCode);
             }
