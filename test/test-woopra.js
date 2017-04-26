@@ -95,7 +95,7 @@ describe('Woopra', function() {
 
             woopra.push();
 
-            sslSpy.calledWithMatch('cv_email=billyid').should.equal(true, 'called with cv_email parameter');
+            sslSpy.calledWithMatch({ path: sinon.match('cv_email=billyid') }).should.equal(true, 'called with cv_email parameter');
         });
 
         it('should set and send visitor id/email and custom properties', function() {
@@ -104,8 +104,8 @@ describe('Woopra', function() {
                 gender: 'male'
             }).push();
 
-            sslSpy.calledWithMatch('cv_email=billyid').should.equal(true, 'called with correct email property');
-            sslSpy.calledWithMatch('cv_gender=male').should.equal(true, 'called with visitor property: gender');
+            sslSpy.calledWithMatch({ path: sinon.match('cv_email=billyid') }).should.equal(true, 'called with correct email property');
+            sslSpy.calledWithMatch({ path: sinon.match('cv_gender=male') }).should.equal(true, 'called with visitor property: gender');
 
         });
 
@@ -114,13 +114,15 @@ describe('Woopra', function() {
 
             woopra.client({
                 screen: 'screen',
-                referer: 'referer'
+                referer: 'referer',
+                'user-agent': 'test-user-agent'
             });
 
             woopra.push();
 
-            sslSpy.calledWithMatch('screen=screen').should.equal(true, 'called with screen parameter');
-            sslSpy.calledWithMatch('referer=referer').should.equal(true, 'called with referer parameter');
+            sslSpy.calledWithMatch({ path: sinon.match('screen=screen') }).should.equal(true, 'called with screen parameter');
+            sslSpy.calledWithMatch({ path: sinon.match('referer=referer') }).should.equal(true, 'called with referer parameter');
+            sslSpy.calledWithMatch({ headers: { 'user-agent': sinon.match('test-user-agent') } }).should.equal(true, 'called with user-agent header');
         });
 
     });
@@ -144,7 +146,7 @@ describe('Woopra', function() {
         it('should track an event with no properties', function() {
             woopra.track('test');
 
-            sslSpy.calledWithMatch('event=test').should.equal(true, 'track event name with no properties');
+            sslSpy.calledWithMatch({ path: sinon.match('event=test') }).should.equal(true, 'track event name with no properties');
         });
 
         it('should track an event with properties', function() {
@@ -152,8 +154,8 @@ describe('Woopra', function() {
                 property: true
             });
 
-            sslSpy.calledWithMatch('event=test').should.equal(true, 'track `test` event');
-            sslSpy.calledWithMatch('ce_property=true').should.equal(true, 'track `test` event with property `property=true`');
+            sslSpy.calledWithMatch({ path: sinon.match('event=test') }).should.equal(true, 'track `test` event');
+            sslSpy.calledWithMatch({ path: sinon.match('ce_property=true') }).should.equal(true, 'track `test` event with property `property=true`');
 
         });
 
@@ -164,9 +166,9 @@ describe('Woopra', function() {
                 timestamp: 12345
             });
 
-            sslSpy.calledWithMatch('event=test').should.equal(true, 'track `test` event');
-            sslSpy.calledWithMatch('ce_property=true').should.equal(true, 'track `test` event with property `property=true`');
-            sslSpy.calledWithMatch('timestamp=12345').should.equal(true, 'track with a timestamp (no `ce_` prefix)');
+            sslSpy.calledWithMatch({ path: sinon.match('event=test') }).should.equal(true, 'track `test` event');
+            sslSpy.calledWithMatch({ path: sinon.match('ce_property=true') }).should.equal(true, 'track `test` event with property `property=true`');
+            sslSpy.calledWithMatch({ path: sinon.match('timestamp=12345') }).should.equal(true, 'track with a timestamp (no `ce_` prefix)');
         });
 
         it('should track an event with a timestamp and call callback after `track` succeeds', function(done) {
@@ -244,7 +246,7 @@ describe('Woopra', function() {
                 gender: 'male'
             });
             woopra.push();
-            sslSpy.calledWithMatch('cv_gender=male').should.equal(true, 'Identify with `gender` property = male (before reset)');
+            sslSpy.calledWithMatch({ path: sinon.match('cv_gender=male') }).should.equal(true, 'Identify with `gender` property = male (before reset)');
 
             woopra.reset();
 
