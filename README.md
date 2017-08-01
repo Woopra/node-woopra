@@ -53,9 +53,9 @@ Track event accepts an optional callback with error and HTTP response code param
 ```javascript
 woopra.track('eventName', {
     eventProperty: 'property'
-}, function(err, responseCode) {
+}, function(err, response) {
 	if(err) throw err;
-	console.log(responseCode); //200 if OK
+	console.log('Tracking Response: Code: %s, Body: %j', response.responseCode, response.body); //200 if OK
 });
 ```
 
@@ -110,7 +110,7 @@ The `properties` object takes any custom event properties you want.  For instanc
 
 The `options` object is for event metadata.  It currently accepts `timestamp` which should be in unix ms since epoch UTC, as well as `referer` which must be a url string and must include the protocol (eg: `http://`)
 
-The `callback` will be called once the tacking servers have processed and responded to your track request.
+The `callback` will be called once the tracking servers have processed and responded to your track request.  It will be passed an error, if it exists, and the http response object.
 
 #Changes
 After version 0.3.0, the callbacks passed to `track()` and `push()` will be called with the entire http.IncomingMessage response object, rather than just the status code.
