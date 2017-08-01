@@ -182,8 +182,8 @@ describe('Woopra', function() {
 
             woopra.track('test', {}, {
                 timestamp: 1
-            }, function(err, statusCode) {
-                statusCode.should.equal(200);
+            }, function(err, resp) {
+                resp.statusCode.should.equal(200);
                 should.not.exist(err, 'callback called with no error');
                 stub.restore();
                 done();
@@ -200,8 +200,8 @@ describe('Woopra', function() {
 
             stub.returns(event).yields({statusCode: 200});
 
-            woopra.track('test', {}, function(err, statusCode) {
-                statusCode.should.equal(200);
+            woopra.track('test', {}, function(err, resp) {
+                resp.statusCode.should.equal(200);
                 should.not.exist(err, 'callback called with no error');
                 stub.restore();
                 done();

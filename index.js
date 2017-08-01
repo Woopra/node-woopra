@@ -113,7 +113,7 @@ Woopra.prototype = {
             headers: this.client()['user-agent'] ? { 'user-agent': this.client()['user-agent'] } : {}
         }, function(res) {
             if (typeof cb === 'function') {
-                cb(null, res.statusCode);
+                cb(null, res);
             }
         }).on('error', function(e) {
             if (typeof cb === 'function') {
