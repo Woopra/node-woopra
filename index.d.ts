@@ -112,7 +112,7 @@ declare class Woopra {
      * @param [cb] Callback function after the `push` request succeeds
      * @returns The HTTP request object
      */
-    push(cb?: (res: http.IncomingMessage) => void): http.ClientRequest;
+    push(cb?: (e: Error, code: number) => void): http.ClientRequest;
 
     /**
      * Tracks an event.
@@ -126,11 +126,11 @@ declare class Woopra {
     track(name: string,
           properties: Woopra.Properties,
           options?: Woopra.TrackOptions,
-          cb?: (res: http.IncomingMessage) => void): http.ClientRequest;
+          cb?: (e: Error, code: number) => void): http.ClientRequest;
           
     track(name: string,
           properties: Woopra.Properties,
-          cb: (res: http.IncomingMessage) => void): http.ClientRequest;
+          cb: (e: Error, code: number) => void): http.ClientRequest;
 
     /**
      * Clears client data and visitor properties
