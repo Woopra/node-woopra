@@ -172,6 +172,10 @@ Woopra.prototype = {
         return this;
     },
 
+    ping: function (opts, cb) {
+        return this.request('ping', opts || {}, cb);
+    },
+
     /**
      * Identifies a user with Woopra without creating an event
      */
@@ -221,3 +225,14 @@ Woopra.prototype = {
 };
 
 module.exports = Woopra;
+
+let woopra = new Woopra('redacted.com');
+woopra.initialize();
+woopra.client({cookie:'1234asdf'});
+woopra.identify('ralph-ping-test@woopra.com');
+woopra.track('pv');
+
+setInterval(() => {
+woopra.ping({}, (e, res) => console.log(e, res.statusCode));
+
+}, 2000);

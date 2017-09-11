@@ -159,6 +159,13 @@ describe('Woopra', function() {
 
         });
 
+        it('should send ping requests', function () {
+            woopra.ping();
+            sslSpy.calledWithMatch({path: sinon.match('/track/ping')}).should.equal(true, 'oops');
+            sslSpy.calledWithMatch({path: sinon.match('website=' + PROJECT )}).should.equal(true, 'oops2');
+
+        });
+
         it('should track an event with properties and a timestamp', function() {
             woopra.track('test', {
                 property: true
