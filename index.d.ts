@@ -115,6 +115,15 @@ declare class Woopra {
     push(cb?: (e: Error, res: http.IncomingMessage) => void): http.ClientRequest;
 
     /**
+     * Pings Woopra to refresh the visitor timeout counter
+     * @param [opts] A tracking options object for specifying a custom timestamp
+     * @param [cb] Callback function after the `track` request succeeds
+     * @returns The HTTP request object
+     */
+    ping(opts?: Woopra.TrackOptions,
+         cb?: (e: Error, res: http.IncomingMessage) => void): http.ClientRequest;
+
+    /**
      * Tracks an event.
      *
      * @param name The name of the event that you want to track

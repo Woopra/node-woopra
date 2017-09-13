@@ -180,6 +180,15 @@ Woopra.prototype = {
     },
 
     /**
+     * Pings Woopra to refresh the visitor timeout counter
+     * @param Object opts Hash of ping options
+     * @param Function cb Optional callback function
+     */
+    ping: function (opts, cb) {
+        return this.request('ping', opts || {}, cb);
+    },
+
+    /**
      * Track events and any properties, as they happen
      *
      * @param String name Name of the event
