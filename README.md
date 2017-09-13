@@ -16,7 +16,7 @@ $ npm install woopra
 
 ```javascript
 var Woopra = require('woopra');
- 
+
 // Replace projectKey with your project key (generally your website name)
 // `options` is an object, currently the only option supported is ssl: <true|false> (default: true)
 var woopra = new Woopra('projectKey', options);
@@ -93,10 +93,13 @@ ip | string | IP Address of the visitor.  (Use `0.0.0.0` if the server is perfor
 Sets visitor properties for the current visitor.  Does not send the properties unless `track` or `push` is called.  Returns an instance of the tracker so that you can chain methods.
 
 * `id` - The unique identifier of the visitor.  We highly recommend you use the email of the visitor in order to get the most out of AppConnect
-* `properties` - key/value object for any custom visitor properties you want to associate with the visitor. 
+* `properties` - key/value object for any custom visitor properties you want to associate with the visitor.
 
 ## .push()
 Sends a request to Woopra that only includes any client and visitor data.  This can be used to identify a visitor without generating a tracking event.
+
+## .ping()
+Sends a ping request to Woopra to refresh the visitor timeout counter. This is used if it’s important to keep a visitor status ‘online’ when she’s inactive for a long time (for cases such as watching a long video).
 
 ## .track(eventName, properties, [options, [callback]])
 Tracks an event.
@@ -114,5 +117,3 @@ The `callback` will be called once the tracking servers have processed and respo
 
 #Changes
 After version 0.3.0, the callbacks passed to `track()` and `push()` will be called with the entire http.IncomingMessage response object, rather than just the status code.
-
-
